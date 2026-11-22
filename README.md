@@ -45,6 +45,13 @@ Known PHP-CS-Fixer issue: in a script that starts with a shebang (`#!/usr/bin/en
 insert a new `use` above `declare(strict_types=1)`, which PHP rejects. Put such imports below the `declare` yourself; PHPStan
 reports the broken order (`declareStrictTypes.notFirst`).
 
+The ruleset writes `new Foo()->bar()` without wrapping parentheses (`new_expression_parentheses`), which needs PHP 8.4. A
+package that still supports an older PHP keeps the parentheses:
+
+```php
+return Config::create($finder)->setRules([...Config::rules(), 'new_expression_parentheses' => ['use_parentheses' => true]]);
+```
+
 ## Composer scripts convention
 
 Every eSoul PHP repository defines these scripts, and the shared Jenkins `phpPackagePipeline` step calls them:
