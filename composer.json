@@ -1,0 +1,42 @@
+{
+    "name": "esoul-cz/coding-standard",
+    "description": "Shared PHP-CS-Fixer ruleset for eSoul PHP projects.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["coding-standard", "php-cs-fixer", "psr-12"],
+    "require": {
+        "php": "^8.4",
+        "friendsofphp/php-cs-fixer": "^3.95"
+    },
+    "require-dev": {
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^12.0 || ^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ESoul\\CodingStandard\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ESoul\\CodingStandard\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "scripts": {
+        "phpstan": "phpstan analyse --memory-limit=1G",
+        "cs": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix",
+        "test": "phpunit"
+    },
+    "minimum-stability": "stable"
+}

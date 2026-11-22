@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+/tests export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/.php-cs-fixer.dist.php export-ignore
+/CONTEXT.md export-ignore
+/Jenkinsfile export-ignore
+/phpstan.neon.dist export-ignore
+/phpunit.xml.dist export-ignore
