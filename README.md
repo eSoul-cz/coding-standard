@@ -1,0 +1,66 @@
+# esoul-cz/coding-standard
+
+Shared [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer) ruleset for eSoul PHP packages and applications.
+
+The ruleset is the one the eSoul application template ships in its `.php-cs-fixer.php` (PSR-12 plus the eSoul additions:
+same-line function and control-structure braces, ordered imports, short arrays, trailing commas in multiline lists,
+`declare(strict_types=1)`, and so on). It lives here so every repository uses the same rules instead of a copied file.
+Risky rules are enabled.
+
+## Install
+
+```bash
+composer require --dev esoul-cz/coding-standard
+```
+
+## Usage
+
+`.php-cs-fixer.dist.php`:
+
+```php
+<?php
+
+use ESoul\CodingStandard\Config;
+use PhpCsFixer\Finder;
+
+return Config::create(
+    Finder::create()->files()->in([__DIR__ . '/src', __DIR__ . '/tests']),
+    __DIR__ . '/temp/php-cs-fixer.cache',
+);
+```
+
+`Config::create(Finder $finder, ?string $cacheFile = null)` returns a regular `PhpCsFixer\Config`, so you can still call
+its setters. Without `$cacheFile`, PHP-CS-Fixer's default cache handling applies. `Config::rules()` returns the rules
+array if you need to extend it:
+
+```php
+return Config::create($finder)->setRules([...Config::rules(), 'yoda_style' => false]);
+```
+
+## Composer scripts convention
+
+Every eSoul PHP repository defines these scripts, and the shared Jenkins `phpPackagePipeline` step calls them:
+
+```json
+{
+    "scripts": {
+        "phpstan": "phpstan analyse --memory-limit=1G",
+        "cs": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix",
+        "test": "phpunit"
+    }
+}
+```
+
+`cs` only reports (non-zero exit on violations); `cs:fix` rewrites the files.
+
+## Development
+
+```bash
+composer update
+composer phpstan
+composer cs
+composer test
+```
+
+The tests run the real `php-cs-fixer` binary through `Config::create()` against a badly formatted file and assert the fixed output.
