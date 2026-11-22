@@ -37,6 +37,14 @@ array if you need to extend it:
 return Config::create($finder)->setRules([...Config::rules(), 'yoda_style' => false]);
 ```
 
+The config allows PHP-CS-Fixer to run on a PHP version newer than the syntax it knows (`setUnsupportedPhpVersionAllowed(true)`),
+so `composer cs` keeps working on a new PHP minor (8.6 today) instead of refusing to start. New syntax of that version is
+not understood until PHP-CS-Fixer supports it; CI runs the style check on the main PHP version.
+
+Known PHP-CS-Fixer issue: in a script that starts with a shebang (`#!/usr/bin/env php`), `fully_qualified_strict_types` can
+insert a new `use` above `declare(strict_types=1)`, which PHP rejects. Put such imports below the `declare` yourself; PHPStan
+reports the broken order (`declareStrictTypes.notFirst`).
+
 ## Composer scripts convention
 
 Every eSoul PHP repository defines these scripts, and the shared Jenkins `phpPackagePipeline` step calls them:
@@ -64,3 +72,5 @@ composer test
 ```
 
 The tests run the real `php-cs-fixer` binary through `Config::create()` against a badly formatted file and assert the fixed output.
+CI (`Jenkinsfile`, `phpPackagePipeline`) runs the checks on PHP 8.5 and the tests on 8.4 and 8.6 after Composer re-resolved the
+dependencies on that version. The package supports PHP 8.4 and every later 8.x release (`^8.4`).
