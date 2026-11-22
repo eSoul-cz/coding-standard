@@ -22,6 +22,9 @@ final class Config
         $config = new PhpCsFixerConfig()
             ->setParallelConfig(ParallelConfigFactory::detect())
             ->setRiskyAllowed(true)
+            // eSoul packages support new PHP minors from their release day (8.6 today); PHP-CS-Fixer otherwise refuses to run on
+            // a PHP version newer than the syntax it knows. CI runs the style check on the main PHP version (8.5).
+            ->setUnsupportedPhpVersionAllowed(true)
             ->setFinder($finder)
             ->setRules(self::rules());
 
